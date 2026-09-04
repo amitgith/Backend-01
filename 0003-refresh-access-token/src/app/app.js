@@ -47,17 +47,30 @@ app.get("/api/auth/me", authenticate, async (req, res) => {
 });
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
-  const user = await userModel.findOne(
+  const user = await userModel.findOne({
+    email,
+  });
+  const isValidPassword = await bycrpt.compare(password, user.password);
+  if (!isValidPassword) {
+    return res.status(401).json({
+      message: "Invalid email or password",
+    });
+  }
+  const token = jwt.sign(
     {
-      email,
+      id: user._id,
     },
     config.ACCESS_TOKEN_SECRET,
   );
-  const isValidPassword = await bycrpt.compare(password, user.password);
-  if(!isValidPassword){
-    return res.status(401).json({
-        message:"Invalid email or password"
-    })
-  }
+  res.status(200).json({
+    message:"User LoggedIn successfully",
+    data: {
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    },
+    token,
+  });
 });
 export default app;
