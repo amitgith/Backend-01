@@ -9,8 +9,15 @@ export const authenticate = async (req, res, next) => {
       message: "Token is not found",
     });
   }
-  const data = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
+  try {
+    const data = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Access token expired",
+    });
+  }
   const user = await userModel.findById(data.id);
-  req.user = user;
-  next();
 };
