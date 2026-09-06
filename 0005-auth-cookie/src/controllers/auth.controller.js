@@ -47,6 +47,8 @@ export const registerApiController = async (req, res) => {
       expiresIn: "7d",
     },
   );
+  res.cookie(accessToken, "token");
+//   res.send("hello");
   res.status(201).json({
     message: "User created successfully",
     data: {
