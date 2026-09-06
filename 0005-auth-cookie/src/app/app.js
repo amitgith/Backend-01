@@ -1,8 +1,8 @@
 import express from "express";
+import authRoutes from "../routes/auth.route.js";
 const app = express();
-app.get("/api", (req, res) => {
-  res.status(200).json({
-    message: "Welcome to authentication api",
-  });
-});
+// middleware
+app.use(express.json());
+app.get("/api", authRoutes);
+app.post("/api/auth/register", authRoutes);
 export default app;
