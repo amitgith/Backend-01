@@ -5,4 +5,5 @@ const app = express();
 app.use(express.json());
 app.get("/api", authRoutes);
 app.post("/api/auth/register", authRoutes);
+app.get("/api/auth/me", authRoutes);
 export default app;

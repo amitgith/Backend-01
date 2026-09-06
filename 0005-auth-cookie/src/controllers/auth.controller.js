@@ -48,3 +48,11 @@ export const registerApiController = async (req, res) => {
     },
   });
 };
+export const aboutMeApicontroller = async (req, res) => {
+  console.log(req.user);
+  res.status(200).json({
+    data: {
+      user: req.user,
+    },
+  });
+};
