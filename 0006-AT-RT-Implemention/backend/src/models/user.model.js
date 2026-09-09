@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
       unique: [true, "email is already exits"],
       match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email"],
     },
-    passwodHash: {
+    passwordHash: {
       type: String,
       required: [true, "password is required"],
       minLength: [8, "Minimum 8 lengths are required"],
