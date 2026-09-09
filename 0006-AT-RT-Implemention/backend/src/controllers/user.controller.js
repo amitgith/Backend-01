@@ -1,5 +1,5 @@
 import userModel from "../models/user.model.js";
-import { generateTokens } from "../utils/auth.js";
+import { generateTokens, verifyAccessToken } from "../utils/auth.js";
 import bcrypt from "bcryptjs";
 
 export const apiController = (req, res) => {
@@ -32,7 +32,7 @@ export const registerApiController = async (req, res) => {
     passwordHash: await bcrypt.hash(password, 10),
   });
   const { accessToken, refreshToken } = generateTokens({ userId: user._id });
-  user.refrehToken = refreshToken;
+  user.refreshToken = refreshToken;
   await user.save();
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -53,10 +53,27 @@ export const registerApiController = async (req, res) => {
  */
 
 export const aboutMeApiController = async (req, res) => {
-  const accessToken = req.headers.authorization?.split("")[1];
+  const accessToken = req.headers.authorization?.split(" ")[1];
   if (!accessToken) {
-    return res.status(400).json({
-        message:"Unauthorized token not found"
+    return res.status(401).json({
+      message: "Unauthorized token not found",
+    });
+  }
+  try {
+    const decoded = verifyAccessToken(accessToken);
+    const user = await userModel.findById(decoded.id);
+    res.status(200).json({
+      message: "user fetched successfully",
+      data: {
+        user: {
+          username: user.username,
+          email: user.username,
+        },
+      },
+    });
+  } catch (error) {
+    return res.status(401).json({
+      message: "Unauthorized, Invalid or expired access token",
     });
   }
 };
