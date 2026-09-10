@@ -1,22 +1,31 @@
-import React from "react";
 import { useForm } from "react-hook-form";
+import { useApi } from "../../shared/api";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
+  const api = useApi();
+  const auth = useAuth();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({ mode: "onChange" });
-  const registerSububmit = (data) => {
-    console.log(data);
-    reset();
+  const registerSububmit = async (data) => {
+    try {
+      const res = await api.post("/auth/register", data);
+      console.log(res.data);
+      console.log(data);
+      reset();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <div className="flex flex-col gap-2 p-3">
       <h1 className="text-2xl font-bold">Create account</h1>
       <form
-        onClick={handleSubmit(registerSububmit)}
+        onSubmit={handleSubmit(registerSububmit)}
         className="w-90 flex flex-col gap-2"
       >
         <label className="font-bold text-xl">Enter Your Name</label>
@@ -49,7 +58,7 @@ const Register = () => {
         <input
           className="border border-black rounded p-2"
           {...register("password", { required: "password is required" })}
-          type="text"
+          type="password"
           placeholder="*******"
         />
         {errors.password && (
