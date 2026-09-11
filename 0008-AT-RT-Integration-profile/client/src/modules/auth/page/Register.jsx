@@ -1,11 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useApi } from "../../shared/useApi";
-import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router";
+import useApi from "../../shared/useApi";
 const Register = () => {
-  const navigate = useNavigate();
   const api = useApi();
-  const auth = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
