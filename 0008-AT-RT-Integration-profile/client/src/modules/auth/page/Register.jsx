@@ -1,14 +1,26 @@
 import { useForm } from "react-hook-form";
+import { useApi } from "../../shared/useApi";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router";
 const Register = () => {
+  const navigate = useNavigate();
+  const api = useApi();
+  const auth = useAuth();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({ mode: "onChange" });
-  const registerSubmit = (data) => {
-    console.log(data);
-    reset();
+  const registerSubmit = async (data) => {
+    try {
+      const res = await api.post("/auth/register", data);
+      console.log(res.data);
+      navigate("/profile");
+      reset();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <div className="flex flex-col gap-2 p-3">
@@ -26,7 +38,7 @@ const Register = () => {
             },
             maxLength: {
               value: 10,
-              message: "Username must be at least 10 characters",
+              message: "Username must be at most 10 characters",
             },
           })}
           className="border border-black rounded p-2"
