@@ -1,0 +1,123 @@
+import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import {
+  gernerateTokens,
+  verifyAccessToken,
+  verifyRefreshToken,
+} from "../utils/auth.js";
+export const apiController = (req, res) => {
+  try {
+    console.log("Welcome to authentication api");
+    return res.status(200).json({
+      message: "Welcome to authentication api",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      message: "Interval Server error",
+    });
+  }
+};
+export const registerApiController = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const isUserExists = await userModel.findOne({ email });
+    if (isUserExists) {
+      return res.status(400).json({
+        message: "User already exists",
+        errors: {
+          path: "email",
+          message: "User already exists",
+        },
+      });
+    }
+    const user = await userModel.create({
+      username,
+      email,
+      passwordHash: await bcrypt.hash(password, 10),
+    });
+    const { accessToken, refreshToken } = gernerateTokens({ userId: user._id });
+    user.refreshToken = refreshToken;
+    await user.save();
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+    });
+    res.status(201).json({
+      message: "User registered successfully",
+      data: {
+        user: {
+          username: user.username,
+          email: user.email,
+        },
+      },
+      accessToken,
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      message: "Interval server error",
+    });
+  }
+};
+export const aboutMeApiController = async (req, res) => {
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  if (!accessToken) {
+    return res.status(400).json({
+      message: "Unathorized, access token not found",
+    });
+  }
+  try {
+    const decoded = verifyAccessToken(accessToken);
+    const user = await userModel.findById(decoded.id);
+    res.status(200).json({
+      message: "user fetched successfully",
+      data: {
+        user: {
+          username: user.username,
+          email: user.email,
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(401).json({
+      message: "Unathorized, Invalid or expired access token",
+    });
+  }
+};
+export const refreshApiController = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    return res.status(400).json({
+      message: "Unautorized, refresh token not found",
+    });
+  }
+  try {
+    const decoded = verifyRefreshToken(refreshToken);
+    const user = await userModel.findById(decoded.id);
+    if (refreshToken !== user.refreshToken) {
+      user.refreshToken = null;
+      await user.save();
+      return res.status(401).json({
+        message: "Unathorized , refresh token mismatch",
+      });
+    }
+    const { accessToken, refreshToken: newRefreshToken } = gernerateTokens({
+      userId: user._id,
+    });
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+    });
+    user.refreshToken = newRefreshToken;
+    await user.save();
+    res.status(200).json({
+      message: "Tokens refreshed successfully",
+      accessToken,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(401).json({
+      message: "Unathorized , Invalid or expired refresh token",
+    });
+  }
+};
