@@ -3,7 +3,7 @@ import { MyAuth } from "../context/MyContext";
 import axios from "axios";
 
 const useApi = () => {
-  const { user, setUser, accessToken, setAccessToken } = useContext(MyAuth);
+  const { accessToken, setAccessToken } = useContext(MyAuth);
   const api = axios.create({
     baseURL: "http://localhost:5173/api",
     withCredentials: true,

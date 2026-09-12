@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { user, setUser, accessToken, setAccessToken } = useContext(MyAuth);
+  const {setUser,setAccessToken } = useContext(MyAuth);
   const api = useApi();
   const {
     register,
