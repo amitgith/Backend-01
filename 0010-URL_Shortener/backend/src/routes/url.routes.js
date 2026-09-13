@@ -1,9 +1,6 @@
 import express from "express";
-import {
-  apiController,
-  createApiController,
-} from "../controllers/url.controller.js";
+import { createApiController, getAllApiController } from "../controllers/url.controller.js";
 const router = express.Router();
-router.get("/api", apiController);
-router.post("/url", createApiController);
+router.post("/", createApiController);
+router.get("/", getAllApiController);
 export default router;

@@ -1,19 +1,6 @@
 import urlModel from "../models/url.model.js";
 import generateCode from "../utils/generateCode.js";
 
-export const apiController = (req, res) => {
-  try {
-    console.log("Welcome to URL shortener api");
-    res.status(200).json({
-      message: "Welcome to URL shortener api",
-    });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-};
 export const createApiController = async (req, res) => {
   try {
     const { url } = req.body;
@@ -55,4 +42,19 @@ export const createApiController = async (req, res) => {
   }
 };
 
-// export const 
+export const getAllApiController = async (req, res) => {
+  try {
+    const urls = await urlModel.find();
+    return res.status(200).json({
+      message: "Url fetched successfully",
+      data: {
+        urls,
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
