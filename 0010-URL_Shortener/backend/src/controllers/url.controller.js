@@ -93,3 +93,25 @@ export const deleteApiController = async (req, res) => {
     });
   }
 };
+export const getSingleApiController = async (req, res) => {
+  try {
+    const urlId = req.params.id;
+    const url = await urlModel.findOne({ urlId });
+    if (!url) {
+      return res.status(400).json({
+        error: "Url not found",
+      });
+    }
+    return res.status(200).json({
+      message: "Single URL fetehed successfully",
+      data: {
+        url,
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Internal  server error ",
+    });
+  }
+};
