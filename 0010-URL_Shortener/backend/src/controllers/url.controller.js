@@ -76,3 +76,20 @@ export const redirectApiController = async (req, res) => {
     },
   );
 };
+export const deleteApiController = async (req, res) => {
+  try {
+    const codeId = req.params.id;
+    await urlModel.findByIdAndDelete(codeId);
+    return res.status(200).json({
+      message: "Url deleted successfully",
+      data: {
+        codeId,
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Internal server error ",
+    });
+  }
+};
