@@ -22,8 +22,8 @@ const App = () => {
     console.log(data);
     reset();
   };
-  const fetchUrls = async (data) => {
-    const res = await axios.get("http://localhost:5173/api/url", data);
+  const fetchUrls = async () => {
+    const res = await axios.get("http://localhost:5173/api/url");
     console.log(res.data.data.urls);
     setUrls(res.data.data.urls);
   };
@@ -31,6 +31,13 @@ const App = () => {
   useEffect(() => {
     fetchUrls();
   }, []);
+
+  const deleteUrl = async (id) => {
+    const res = await axios.delete(`http://localhost:5173/api/url/${id}`);
+    console.log(res.data.data);
+    setCurrentUrl(res.data.data);
+    fetchUrls();
+  };
   return (
     <div className="w-full flex flex-col justify-center">
       <form
@@ -60,7 +67,7 @@ const App = () => {
       </form>
       <div className="w-full">
         {urls.map((url) => (
-          <UrlPage key={url._id} url={url} />
+          <UrlPage key={url._id} url={url} deleteUrl={deleteUrl} />
         ))}
       </div>
     </div>
