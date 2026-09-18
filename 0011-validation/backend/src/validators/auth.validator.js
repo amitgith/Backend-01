@@ -24,5 +24,6 @@ export const registerValidator = [
         errors: errors.array(),
       });
     }
+    next();
   },
 ];
