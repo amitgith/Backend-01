@@ -8,5 +8,21 @@ export const registerValidator = [
   body("phone")
     .exists()
     .withMessage("Phone Number is required")
-    .isMobilePhone("en-IN").withMessage("Invalid Pho")
+    .isMobilePhone("en-IN")
+    .withMessage("Invalid Phone Number"),
+  body("password")
+    .exists()
+    .withMessage("Password is required")
+    .trim()
+    .isLength({ min: 8 })
+    .withMessage("Password at least 6 Characters long"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: "Invalid Request",
+        errors: errors.array(),
+      });
+    }
+  },
 ];
