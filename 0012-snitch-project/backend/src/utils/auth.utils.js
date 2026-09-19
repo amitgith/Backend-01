@@ -7,5 +7,14 @@ export const generateTokens = ({ userId }) => {
   const refreshToken = jwt.sign({ id: userId }, config.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
-  return {accessToken,refreshToken}
+  return { accessToken, refreshToken };
+};
+
+export const verifyAccessToken = (token) => {
+  const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
+  return decoded;
+};
+export const verifyRefreshToken = (token) => {
+  const decoded = jwt.verify(token, config.REFRESH_TOKEN_SECRET);
+  return decoded;
 };
