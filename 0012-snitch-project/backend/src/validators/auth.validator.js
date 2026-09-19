@@ -24,7 +24,7 @@ export const registerValidator = [
     .withMessage("Password must be minimum 6 characters long"),
   (req, res, next) => {
     const errors = validationResult(req);
-    if (!errors.trim()) {
+    if (!errors.isEmpty()) {
       return res.status(400).json({
         message: "Invalid Request",
         errors: errors.array(),
