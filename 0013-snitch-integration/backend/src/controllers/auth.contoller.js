@@ -64,3 +64,39 @@ export const registerApiController = async (req, res) => {
     });
   }
 };
+export const loginApiController = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await userModel.findOne({
+    email,
+  });
+  if (!user) {
+    return res.status(400).json({
+      message: "Invalid email or password",
+    });
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+  if (!isPasswordValid) {
+    return res.status(400).json({
+      message: "Invalid email or password",
+    });
+  }
+  const { accessToken, refreshToken } = generateTokens({
+    userId: user._id,
+    role: user.role,
+  });
+  await userModel.findOneAndUpdate({ email }, { refreshToken });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+  });
+  res.status(200).json({
+    message: "User loggedIn Succesfully",
+    data: {
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+      },
+    },
+    accessToken,
+  });
+};
