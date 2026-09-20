@@ -13,3 +13,15 @@ export const userRegister = createAsyncThunk(
     }
   },
 );
+export const userLogin = createAsyncThunk(
+  "/login",
+  async (credentials, thunkApi) => {
+    try {
+      const res = await axiosInstance.post("/login", credentials);
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);

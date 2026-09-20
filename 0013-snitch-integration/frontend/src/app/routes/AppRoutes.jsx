@@ -11,7 +11,7 @@ const AppRoutes = () => {
       element: <Login />,
     },
     {
-      path: "login",
+      path: "register",
       element: <Register />,
     },
   ]);

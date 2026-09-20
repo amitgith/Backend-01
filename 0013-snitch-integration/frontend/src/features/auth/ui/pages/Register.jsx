@@ -2,7 +2,8 @@ import React from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
-  const { register, handleSubmit, reset, errors, registerSubmit } = useAuth();
+  const { register, handleSubmit, reset, errors, registerSubmit, navigate } =
+    useAuth();
   return (
     <div className="flex flex-col gap-2 p-2">
       <h1 className="text-xl font-bold">User registered form</h1>
@@ -50,8 +51,17 @@ const Register = () => {
           <p className="text-red-600">{errors.password.message}</p>
         )}
         <button className="bg-sky-600 rounded text-white p-2 cursor-pointer">
-          Create
+          Register
         </button>
+        <p>
+          Already have an account{" "}
+          <button
+            onClick={() => navigate("/")}
+            className="text-red-600 cursor-pointer"
+          >
+            Login
+          </button>{" "}
+        </p>
       </form>
     </div>
   );
