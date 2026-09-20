@@ -2,12 +2,12 @@ import React from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 const Register = () => {
-  const { register, handleSubmit, reset, errors, userRegister } = useAuth();
+  const { register, handleSubmit, reset, errors, registerSubmit } = useAuth();
   return (
     <div className="flex flex-col gap-2 p-2">
       <h1 className="text-xl font-bold">User registered form</h1>
       <form
-        onSubmit={handleSubmit(userRegister)}
+        onSubmit={handleSubmit(registerSubmit)}
         className="w-90 flex flex-col gap-4"
       >
         <input
