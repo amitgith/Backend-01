@@ -12,3 +12,12 @@ export const gernerateToken = ({ userId, role }) => {
     refreshToken,
   };
 };
+
+export const verifyAccessToken = (accessToken) => {
+  const decoded = jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET);
+  return decoded;
+};
+export const verifyRefreshToken = (refreshToken) => {
+  const decoded = jwt.verify(refreshToken, config.refreshToken);
+  return decoded;
+};
