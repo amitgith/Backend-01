@@ -131,9 +131,7 @@ export const refreshApiController = async (req, res) => {
 
   try {
     const decoded = readRefreshToken(refreshToken);
-
     const { userId, role } = decoded;
-
     console.log("Decoded:", decoded)
 console.log("UserId:", userId)
     const user = await userModel.findById(userId);
@@ -142,7 +140,6 @@ console.log("UserId:", userId)
         message: "User not found or account deleted",
       });
     }
-
     if (refreshToken != user.refreshToken) {
       await userModel.findByIdAndUpdate(user._id, {
         refreshToken: null,
