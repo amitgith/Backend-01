@@ -197,3 +197,25 @@ export const aboutMeApiController = async (req, res) => {
     });
   }
 };
+export const logoutApiController = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (refreshToken) {
+      await userModel.findOneAndUpdate(
+        {
+          refreshToken,
+        },
+        { refreshToken: null },
+      );
+    }
+    res.clearCookie("refreshToken");
+    return res.status(200).json({
+      message: "User loggedOut successfully",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
