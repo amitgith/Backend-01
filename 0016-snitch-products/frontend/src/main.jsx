@@ -3,9 +3,11 @@ import "./index.css";
 import AppRoutes from "./app/routes/AppRoutes.jsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.jsx";
+import toast, { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <AppRoutes />
+    <Toaster />
   </Provider>,
 );

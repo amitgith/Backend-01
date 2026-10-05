@@ -4,14 +4,16 @@ import { RouterProvider } from "react-router";
 import Login from "../../features/auth/ui/pages/Login";
 import Register from "../../features/auth/ui/pages/Register";
 import { useDispatch } from "react-redux";
-import { currentLoggedUser } from "../../features/auth/state/authAction";
+import { currentLoggedUser, refreshAccessToken } from "../../features/auth/state/authAction";
 const AppRoutes = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    (() => {
-      dispatch(currentLoggedUser());
-    })();
-  }, []);
+    dispatch(refreshAccessToken()).then((result) => {
+      if (refreshAccessToken.fulfilled.match(result)) {
+        dispatch(currentLoggedUser());
+      }
+    });
+  }, [dispatch]);
   const router = createBrowserRouter([
     {
       path: "/",

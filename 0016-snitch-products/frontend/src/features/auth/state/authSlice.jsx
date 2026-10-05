@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { currentLoggedUser, loginUser, registerUser } from "./authAction";
+import {
+  currentLoggedUser,
+  loginUser,
+  refreshAccessToken,
+  registerUser,
+} from "./authAction";
 
 const authSlice = createSlice({
   name: "auth",
@@ -47,6 +52,18 @@ const authSlice = createSlice({
         state.user = null;
         state.isLoading = false;
       })
+      .addCase(refreshAccessToken.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(refreshAccessToken.fulfilled, (state, action) => {
+        state.accessToken = action.payload.accessToken;
+        state.isLoading = false;
+      })
+      .addCase(refreshAccessToken.rejected, (state) => {
+        state.accessToken = null;
+        state.user = null;
+        state.isLoading = false;
+      })
       .addCase(currentLoggedUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -60,5 +77,5 @@ const authSlice = createSlice({
       });
   },
 });
-export const { addUser, removeUser } = authSlice.actions;
+export const { addUser, removeUser, setAccessToken } = authSlice.actions;
 export default authSlice.reducer;
