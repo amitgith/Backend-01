@@ -78,8 +78,8 @@ export const redirectApiController = async (req, res) => {
 };
 export const deleteApiController = async (req, res) => {
   try {
-    const codeId = req.params.id;
-    await urlModel.findByIdAndDelete(codeId);
+    const {id} = req.params;
+    await urlModel.findByIdAndDelete(id);
     return res.status(200).json({
       message: "Url deleted successfully",
       data: {

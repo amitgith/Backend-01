@@ -3,6 +3,7 @@ import userModel from "../models/user.model.js";
 import bycrpt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
+import { authenicate } from "../middleware/auth.middleware.js";
 const app = express();
 // middleware
 app.use(express.json());
@@ -36,5 +37,12 @@ app.post("/api/auth/register", async (req, res) => {
     },
   });
 });
-app.get("/api/auth/me",)
+app.get("/api/auth/me", authenicate, async (req, res) => {
+  console.log(req.user);
+  res.status(200).json({
+    data: {
+      user: req.user,
+    },
+  });
+});
 export default app;

@@ -1,6 +1,6 @@
-import { config } from "dotenv";
 import config from "../config/config.js";
 import userModel from "../models/user.model.js";
+import jwt from "jsonwebtoken";
 export const authenicate = async (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) {

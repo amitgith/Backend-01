@@ -157,6 +157,9 @@ export const refreshApiController = async (req, res) => {
     });
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
     });
     res.status(200).json({
       message: "Tokens rotated successfully",
