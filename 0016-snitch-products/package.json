@@ -1,0 +1,8 @@
+{
+  "name": "0016-snitch-products",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build --prefix frontend"
+  }
+}
