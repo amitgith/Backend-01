@@ -1,5 +1,5 @@
 import passport from "passport";
-import {Strategy: GoogleStrategy} from "passport-google-oauth20"
+import {Strategy as GoogleStrategy} from "passport-google-oauth20"
 passport.use(new GoogleStrategy({
     GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET:process.env.GOOGLE_CLIENT_SECRET,
