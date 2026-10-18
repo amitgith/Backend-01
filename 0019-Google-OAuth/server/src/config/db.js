@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { config } from "./config.js";
+// mongodb connected
 export default async function connectToDB() {
   try {
     await mongoose.connect(config.MONGO_URI);
