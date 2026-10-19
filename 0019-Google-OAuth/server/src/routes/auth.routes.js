@@ -1,5 +1,7 @@
 import { Router } from "express";
 import passport from "../config/passport.js";
+import userModel from "../models/user.model.js";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -17,5 +19,36 @@ router.get(
     session: false,
     prompt: "select_account",
   }),
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/",
+  }),
+  async (req, res) => {
+    const user = req.user;
+    const email = user.emails[0].value;
+    const isUserExists = await userModel.findOne({ email });
+    // ---- Handle the login---
+    if (isUserExists) {
+      const token = jwt.sign({ id: isUserExists._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+      return res.status(200).json({ token });
+    }
+
+    // Handle the Signup
+    const newUser = await userModel.create({
+      fullname: user.displayName,
+      email,
+      googleId: user.id,
+    });
+    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    return res.status(201).json({ token });
+  },
 );
 export default router;
