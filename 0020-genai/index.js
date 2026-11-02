@@ -10,7 +10,6 @@ const model = new ChatGroq({
   model: "openai/gpt-oss-120b",
   apiKey: process.env.GROQ_API_KEY,
 });
-// loop
 while (true) {
   const userInput = await readline.question("Enter your input: ");
   const stream = await model.stream([
