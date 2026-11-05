@@ -1,0 +1,20 @@
+import fs from "fs/promises";
+import { CONFIG_DIR, HOME_DIR } from "./constant.js";
+// Return the content of the settings file (create if it doesn't exist)
+export async function getSettingsFile() {
+  // Ensure the config directory exists
+  try {
+    await fs.access(CONFIG_DIR);
+  } catch (error) {
+    await fs.mkdir(CONFIG_DIR, { recursive: true });
+  }
+  const settingsFilePath = path.join(CONFIG_DIR, "settings.json");
+  try {
+    await fs.access(settingsFilePath);
+    const content = await fs.readFile(settingsFilePath, "utf-8");
+    return JSON.parse(content);
+  } catch (error) {
+    await fs.writeFile(settingsFilePath, JSON.stringify({}));
+    return {};
+  }
+}
