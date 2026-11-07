@@ -31,3 +31,8 @@ export async function saveApiKey(apiKey) {
     }),
   );
 }
+// Get api key from the settings file
+export async function getApiKey() {
+  const settings = await getSettingsFile();
+  return settings.apiKey || null;
+}
