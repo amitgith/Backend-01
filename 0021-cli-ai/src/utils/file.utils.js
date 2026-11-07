@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import { CONFIG_DIR, HOME_DIR } from "./constant.js";
+import path from "path";
 // Return the content of the settings file (create if it doesn't exist)
 export async function getSettingsFile() {
   // Ensure the config directory exists
@@ -17,4 +18,16 @@ export async function getSettingsFile() {
     await fs.writeFile(settingsFilePath, JSON.stringify({}));
     return {};
   }
+}
+// Save API key to the settings file
+export async function saveApiKey(apiKey) {
+  const settingsFilePath = path.join(CONFIG_DIR, "settings.json");
+  const settingsContent = await getSettingsFile();
+  await fs.writeFile(
+    settingsFilePath,
+    JSON.stringify({
+      ...settingsContent,
+      apiKey,
+    }),
+  );
 }
