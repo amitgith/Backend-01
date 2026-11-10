@@ -1,7 +1,6 @@
 import fs from "fs/promises";
 import { CONFIG_DIR, HOME_DIR } from "./constant.js";
 import path from "path";
-// Return the content of the settings file (create if it doesn't exist)
 export async function getSettingsFile() {
   // Ensure the config directory exists
   try {
