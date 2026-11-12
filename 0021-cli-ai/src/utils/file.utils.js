@@ -18,7 +18,6 @@ export async function getSettingsFile() {
     return {};
   }
 }
-// Save API key to the settings 
 export async function saveApiKey(apiKey) {
   const settingsFilePath = path.join(CONFIG_DIR, "settings.json");
   const settingsContent = await getSettingsFile();
