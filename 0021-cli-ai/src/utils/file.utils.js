@@ -29,7 +29,7 @@ export async function saveApiKey(apiKey) {
     }),
   );
 }
-// Get api key from the settings 
+// Get api key from the 
 export async function getApiKey() {
   const settings = await getSettingsFile();
   return settings.apiKey || null;
