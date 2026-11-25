@@ -29,6 +29,7 @@ export async function saveApiKey(apiKey) {
     }),
   );
 }
+// 
 export async function getApiKey() {
   const settings = await getSettingsFile();
   return settings.apiKey || null;
